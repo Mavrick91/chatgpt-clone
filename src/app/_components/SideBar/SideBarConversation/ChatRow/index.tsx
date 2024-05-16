@@ -28,8 +28,8 @@ const ChatRow = ({ id }: Props) => {
 		}
 	}, [pathname, router, id]);
 
-	const handleClickDeleteChat = useCallback(async () => {
-		await deleteDoc(doc(db, "users", session?.user?.email!, "chats", id));
+	const handleClickDeleteChat = useCallback(() => {
+		deleteDoc(doc(db, "users", session?.user?.email!, "chats", id));
 		router.replace("/");
 	}, [session?.user?.email, id, router]);
 
