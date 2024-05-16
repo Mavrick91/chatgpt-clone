@@ -82,4 +82,17 @@ main {
 		height: 1.5rem;
 		width: 1.5rem;
 	}
+
+	.transition-width {
+		transition-duration: 0.15s;
+		transition-property: width;
+		transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+	}
+
+	.icon-2xl {
+		stroke-width: 1.5;
+		flex-shrink: 0;
+		height: 2rem;
+		width: 2rem;
+	}
 }

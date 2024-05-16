@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import Providers from "./_components/Provider";
+import Providers from "../Provider";
 import Header from "./_components/Header";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -20,8 +20,12 @@ export default function RootLayout({
 		<html lang="en" className="dark">
 			<body className={inter.className}>
 				<Providers>
-					<Header />
-					<main>{children}</main>
+					<div className="relative z-0 flex size-full overflow-hidden">
+						<div className="relative flex h-full max-w-full flex-1 flex-col overflow-hidden">
+							<Header />
+							{children}
+						</div>
+					</div>
 				</Providers>
 			</body>
 		</html>

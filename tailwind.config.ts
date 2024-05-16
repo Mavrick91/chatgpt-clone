@@ -11,6 +11,8 @@ const config: Config = {
 				"token-text-tertiary": "var(--text-tertiary)",
 				"token-text-secondary": "var(--text-secondary)",
 				"token-main-surface-secondary": "var(--main-surface-secondary)",
+				"token-text-quaternary": "var(--text-quaternary)",
+				"token-border-light": "var(--border-light)",
 			},
 		},
 	},
