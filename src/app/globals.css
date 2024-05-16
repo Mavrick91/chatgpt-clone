@@ -95,4 +95,11 @@ main {
 		height: 2rem;
 		width: 2rem;
 	}
+
+	.icon-xl-heavy {
+		stroke-width: 2;
+		flex-shrink: 0;
+		height: 24px;
+		width: 24px;
+	}
 }

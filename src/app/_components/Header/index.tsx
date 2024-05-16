@@ -26,7 +26,7 @@ const Header = () => {
 			</button>
 			<div className="absolute inset-y-0 right-0 flex items-center">
 				<button type="button" className="px-3">
-					<NewIcon />
+					<NewIcon className="icon-lg mx-2.5 text-token-text-secondary" />
 				</button>
 			</div>
 		</div>

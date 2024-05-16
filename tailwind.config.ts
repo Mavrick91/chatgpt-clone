@@ -13,6 +13,8 @@ const config: Config = {
 				"token-main-surface-secondary": "var(--main-surface-secondary)",
 				"token-text-quaternary": "var(--text-quaternary)",
 				"token-border-light": "var(--border-light)",
+				"token-sidebar-surface-primary": "var(--sidebar-surface-primary)",
+				"token-sidebar-surface-secondary": "var(--sidebar-surface-secondary)",
 			},
 		},
 	},
