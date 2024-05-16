@@ -11,6 +11,31 @@ main {
 	height: 100%;
 }
 
+.social-btn {
+	position: relative;
+	width: 320px;
+	border: 1px solid #c2c8d0;
+	border-radius: 6px;
+	font-size: 16px;
+	align-items: center;
+	background-color: #fff;
+	height: 52px;
+	transition: box-shadow 0.15 ease-in-out, background-color 0.15s ease-in-out;
+	cursor: pointer;
+	padding: 0 8px 0 52px;
+	color: #2d333a;
+	margin-bottom: 8px;
+	display: flex;
+	outline: 0;
+}
+
+.social-logo-wrapper {
+	position: absolute;
+	left: 26px;
+	top: 50%;
+	transform: translate(-50%) translateY(-50%);
+}
+
 @layer base {
 	:root {
 		--white: #fff;
