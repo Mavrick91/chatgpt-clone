@@ -5,7 +5,8 @@ const config: Config = {
 	theme: {
 		extend: {
 			colors: {
-				"text-token-text-primary": "var('--text-primary')",
+				"token-text-primary": "var(--text-primary)",
+				"token-main-surface-primary": "var(--main-surface-primary)",
 			},
 		},
 	},
