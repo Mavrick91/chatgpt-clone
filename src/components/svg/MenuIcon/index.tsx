@@ -2,7 +2,7 @@ import React from "react";
 
 const MenuIcon = () => {
 	return (
-		<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+		<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" className="icon-lg mx-2.5 text-token-text-secondary">
 			<path
 				fill="currentColor"
 				fill-rule="evenodd"
