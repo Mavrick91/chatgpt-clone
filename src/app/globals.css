@@ -52,3 +52,27 @@ main {
 		--link-hover: #5e83b3;
 	}
 }
+
+@layer utilities {
+	.icon-sm,
+	.icon-sm-heavy {
+		flex-shrink: 0;
+		height: 1rem;
+		width: 1rem;
+	}
+
+	.icon-sm {
+		stroke-width: 2;
+	}
+
+	.icon-md,
+	.icon-md-heavy {
+		flex-shrink: 0;
+		height: 18px;
+		width: 18px;
+	}
+
+	.icon-md {
+		stroke-width: 1.5;
+	}
+}

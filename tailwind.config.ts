@@ -7,6 +7,10 @@ const config: Config = {
 			colors: {
 				"token-text-primary": "var(--text-primary)",
 				"token-main-surface-primary": "var(--main-surface-primary)",
+				"token-border-medium": "var(--border-medium)",
+				"token-text-tertiary": "var(--text-tertiary)",
+				"token-text-secondary": "var(--text-secondary)",
+				"token-main-surface-secondary": "var(--main-surface-secondary)",
 			},
 		},
 	},
