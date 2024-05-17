@@ -1,5 +1,3 @@
-import React from "react";
-
 const GPTLogo = () => (
 	<svg width="41" height="41" viewBox="0 0 41 41" fill="none" xmlns="http://www.w3.org/2000/svg" className="size-12" role="img">
 		<text x="-9999" y="-9999">

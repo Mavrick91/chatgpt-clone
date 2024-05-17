@@ -1,5 +1,4 @@
 import FormInput from "@/components/FormInput";
-import React from "react";
 import ChatMessages from "./_components/ChatMessages";
 
 const Chat = ({ params }: NextPageProps) => {

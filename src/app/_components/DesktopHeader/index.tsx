@@ -1,5 +1,4 @@
 import ModelChoice from "@/components/ModelChoice";
-import React from "react";
 
 const DesktopHeader = () => {
 	return (

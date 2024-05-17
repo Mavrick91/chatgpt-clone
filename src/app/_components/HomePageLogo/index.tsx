@@ -1,5 +1,4 @@
 import GPTLogo from "@/components/svg/GPTLogo";
-import React from "react";
 
 const HomePageLogo = () => {
 	return (

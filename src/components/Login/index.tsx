@@ -1,6 +1,5 @@
 "use client";
 
-import React from "react";
 import GoogleLogo from "../svg/GoogleLogo";
 import { signIn } from "next-auth/react";
 

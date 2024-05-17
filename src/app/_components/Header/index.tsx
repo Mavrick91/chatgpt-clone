@@ -1,7 +1,6 @@
 import DropdownIcon from "@/components/svg/DropdownIcon";
 import MenuIcon from "@/components/svg/MenuIcon";
 import NewIcon from "@/components/svg/NewIcon";
-import React from "react";
 
 const Header = () => {
 	return (
