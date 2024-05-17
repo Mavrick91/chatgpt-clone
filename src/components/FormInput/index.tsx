@@ -6,7 +6,7 @@ import { db } from "@/firebase";
 import { useModels } from "@/providers/ModelsProvider";
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 import { useSession } from "next-auth/react";
-import React, { useCallback } from "react";
+import React, { useCallback, useEffect, useRef } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 
@@ -21,10 +21,22 @@ type Props = {
 const FormInput = ({ chatId }: Props) => {
 	const { data: session } = useSession();
 	const { defaultModel } = useModels();
+	const textAreaRef = useRef<HTMLTextAreaElement | null>(null);
 
 	const { watch, handleSubmit, register, reset } = useForm<FormData>();
 
 	const watchMessage = watch("message");
+
+	const adjustTextAreaHeight = useCallback(() => {
+		if (textAreaRef.current) {
+			textAreaRef.current.style.height = "auto";
+			textAreaRef.current.style.height = textAreaRef.current.scrollHeight + "px";
+		}
+	}, []);
+
+	useEffect(() => {
+		adjustTextAreaHeight();
+	}, [watchMessage, adjustTextAreaHeight]);
 
 	const onSubmit = useCallback(
 		async (data: FormData) => {
@@ -52,16 +64,8 @@ const FormInput = ({ chatId }: Props) => {
 				},
 				body: JSON.stringify({ prompt: text, chatId, model: defaultModel, session }),
 			})
-				.then(async (res) => {
-					if (res.ok) {
-						const data = await res.json();
-					} else {
-						const errorData = await res.json();
-						toast.error("Server error, try again later.");
-					}
-				})
 				.catch(() => {
-					toast.error("An error occurred. Please try again.");
+					toast.error("An error occurred. Please try again later.");
 				})
 				.finally(() => {
 					toast.dismiss(notificationId);
@@ -106,9 +110,11 @@ const FormInput = ({ chatId }: Props) => {
 												id="prompt-textarea"
 												tabIndex={0}
 												rows={1}
+												ref={textAreaRef}
 												placeholder="Message ChatGPT"
 												className="m-0 max-h-[25dvh] resize-none border-0 bg-transparent px-0 text-token-text-primary focus:ring-0 focus-visible:outline-none focus-visible:ring-0"
 												onKeyDown={handlePressEnter}
+												onInput={adjustTextAreaHeight}
 											/>
 										</div>
 										<button
