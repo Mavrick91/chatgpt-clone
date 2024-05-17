@@ -2,7 +2,7 @@ import DropdownIcon from "@/components/svg/DropdownIcon";
 import MenuIcon from "@/components/svg/MenuIcon";
 import NewIcon from "@/components/svg/NewIcon";
 
-const Header = () => {
+const MobileHeader = () => {
 	return (
 		<div className="sticky top-0 z-10 flex min-h-[60px] items-center justify-center border-b border-transparent bg-token-main-surface-primary pl-1 md:hidden">
 			<button
@@ -32,4 +32,4 @@ const Header = () => {
 	);
 };
 
-export default Header;
+export default MobileHeader;

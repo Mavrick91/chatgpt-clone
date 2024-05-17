@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import Providers from "../Provider";
-import Header from "./_components/Header";
+import MobileHeader from "./_components/MobileHeader";
 import SideBar from "./_components/SideBar";
 import DesktopHeader from "./_components/DesktopHeader";
 
@@ -25,7 +25,7 @@ export default function RootLayout({
 					<div className="relative z-0 flex size-full overflow-hidden">
 						<SideBar />
 						<div className="relative flex h-full max-w-full flex-1 flex-col overflow-hidden">
-							<Header />
+							<MobileHeader />
 							<main className="transition-width relative size-full flex-1 overflow-auto">
 								<div role="presentation" tabIndex={0} className="flex h-full flex-col focus-visible:outline-0">
 									<div className="flex flex-1 flex-col overflow-hidden">
