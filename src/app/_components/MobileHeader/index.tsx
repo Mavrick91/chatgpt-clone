@@ -1,8 +1,13 @@
-import DropdownIcon from "@/components/svg/DropdownIcon";
+"use client";
+
+import ModelChoice from "@/components/ModelChoice";
 import MenuIcon from "@/components/svg/MenuIcon";
 import NewIcon from "@/components/svg/NewIcon";
+import { useCreateChat } from "@/hooks/useCreateChat";
 
 const MobileHeader = () => {
+	const createNewChat = useCreateChat();
+
 	return (
 		<div className="sticky top-0 z-10 flex min-h-[60px] items-center justify-center border-b border-transparent bg-token-main-surface-primary pl-1 md:hidden">
 			<button
@@ -16,7 +21,7 @@ const MobileHeader = () => {
 			<ModelChoice isMobile />
 
 			<div className="absolute inset-y-0 right-0 flex items-center">
-				<button type="button" className="px-3">
+				<button type="button" className="px-3" onClick={createNewChat}>
 					<NewIcon className="icon-lg mx-2.5 text-token-text-secondary" />
 				</button>
 			</div>
