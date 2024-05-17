@@ -24,6 +24,8 @@ export const useCreateChat = () => {
 			});
 
 			router.push(`/chat/${doc.id}`);
+
+			return doc.id;
 		} catch (error) {
 			console.error("Failed to create a new chat:", error);
 		}

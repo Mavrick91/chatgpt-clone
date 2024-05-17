@@ -4,6 +4,7 @@ import { askQuestion } from "@/actions/ask-question";
 import AddFileIcon from "@/components/svg/AddFileIcon";
 import ButtonSend from "@/components/svg/ButtonSend";
 import { db } from "@/firebase";
+import { useCreateChat } from "@/hooks/useCreateChat";
 import { useModels } from "@/providers/ModelsProvider";
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 import { useSession } from "next-auth/react";
@@ -22,6 +23,7 @@ type Props = {
 const FormInput = ({ chatId }: Props) => {
 	const { data: session } = useSession();
 	const { defaultModel } = useModels();
+	const createNewChat = useCreateChat();
 
 	const { watch, handleSubmit, register, reset } = useForm<FormData>();
 
@@ -63,11 +65,15 @@ const FormInput = ({ chatId }: Props) => {
 					},
 				};
 
-				if (chatId) {
-					await addDoc(collection(db, "users", session.user?.email!, "chats", chatId, "messages"), message);
+				let newChatId: string | undefined;
+
+				if (!chatId) {
+					newChatId = await createNewChat();
 				}
 
-				await askQuestion(messageContent, chatId!, session.user?.email!, defaultModel);
+				if (chatId || newChatId) await addDoc(collection(db, "users", session.user?.email!, "chats", newChatId || chatId || "", "messages"), message);
+
+				await askQuestion(messageContent, newChatId || chatId!, session.user?.email!, defaultModel);
 			} catch (error) {
 				console.error("Error sending message:", error);
 				toast.error("An error occurred while sending your message.");
@@ -75,7 +81,7 @@ const FormInput = ({ chatId }: Props) => {
 				toast.dismiss(notificationId);
 			}
 		},
-		[chatId, defaultModel, reset, session]
+		[chatId, createNewChat, defaultModel, reset, session]
 	);
 
 	const handlePressEnter = useCallback(
