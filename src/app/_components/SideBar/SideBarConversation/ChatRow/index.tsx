@@ -30,8 +30,8 @@ const ChatRow = ({ id }: Props) => {
 
 	const handleClickDeleteChat = useCallback(() => {
 		deleteDoc(doc(db, "users", session?.user?.email!, "chats", id));
-		router.replace("/");
-	}, [session?.user?.email, id, router]);
+		if (active) router.replace("/");
+	}, [session?.user?.email, id, active, router]);
 
 	return (
 		<li className="relative mt-2">
@@ -42,7 +42,7 @@ const ChatRow = ({ id }: Props) => {
 			>
 				<Link href={`/chat/${id}`} className="flex items-center gap-2 p-2">
 					<div className="relative grow overflow-hidden whitespace-nowrap">
-						{messages?.docs.length ? messages.docs[messages.docs.length - 1].data().text : "New chat"}
+						{messages?.docs.length ? messages.docs[0].data().text : "New chat"}
 						<div
 							className={classNames("absolute inset-y-0 right-0 w-8 bg-gradient-to-l from-token-sidebar-surface-primary from-0% to-transparent group-hover:w-10", {
 								"w-10 from-token-sidebar-surface-secondary from-60%": active,
