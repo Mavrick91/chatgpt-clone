@@ -80,12 +80,12 @@ const FormInput = ({ chatId }: Props) => {
 
 	const handlePressEnter = useCallback(
 		(event: React.KeyboardEvent<HTMLTextAreaElement>) => {
-			if (event.key === "Enter" && !event.shiftKey) {
+			if (event.key === "Enter" && !event.shiftKey && !!watchMessage.trim()) {
 				event.preventDefault();
 				handleSubmit(onSubmit)();
 			}
 		},
-		[handleSubmit, onSubmit]
+		[handleSubmit, onSubmit, watchMessage]
 	);
 
 	return (
