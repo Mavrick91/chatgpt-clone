@@ -1,25 +1,18 @@
-"use client";
-
 import ChatGPTLogo from "@/components/svg/ChatGPTLogo";
-import { db } from "@/firebase";
-import { collection, orderBy, query } from "firebase/firestore";
+import { DocumentData } from "firebase/firestore";
+import "github-markdown-css/github-markdown.css";
 import { useSession } from "next-auth/react";
-import { useCollection } from "react-firebase-hooks/firestore";
+import { useEffect, useRef } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import "github-markdown-css/github-markdown.css";
-import { useRef, useEffect } from "react";
-import Spinner from "@/components/Spinner";
 
 type Props = {
-	chatId: string;
+	messages: DocumentData[] | undefined;
 };
 
-const ChatMessages = ({ chatId }: Props) => {
+const ChatMessages = ({ messages }: Props) => {
 	const { data: session } = useSession();
 	const messagesEndRef = useRef<HTMLDivElement | null>(null);
-
-	const [messages, loading] = useCollection(session && query(collection(db, "users", session?.user?.email!, "chats", chatId, "messages"), orderBy("createdAt")));
 
 	useEffect(() => {
 		if (messagesEndRef.current) {
@@ -28,11 +21,9 @@ const ChatMessages = ({ chatId }: Props) => {
 	}, [messages]);
 
 	return (
-		<div className="size-full overflow-y-auto overflow-x-hidden" >
-			{loading ? <Spinner/> : messages?.docs.map((message) => {
-				const messageInfo = message.data();
-
-				if (messageInfo.user._id === session?.user?.email)
+		<div className="size-full overflow-y-auto overflow-x-hidden">
+			{messages?.map((message) => {
+				if (message.user._id === session?.user?.email)
 					return (
 						<div key={message.id} className="w-full text-token-text-primary">
 							<div className="m-auto px-3 py-[18px] text-base md:px-5 lg:px-1 xl:px-5">
@@ -42,7 +33,7 @@ const ChatMessages = ({ chatId }: Props) => {
 											<div className="flex max-w-full grow flex-col">
 												<div className="flex min-h-[20px] w-full flex-col items-end gap-2 overflow-x-auto whitespace-pre-wrap break-words [.text-message+&]:mt-5">
 													<div className="flex w-full flex-col items-end gap-1 empty:hidden rtl:items-start">
-														<div className="relative max-w-[90%] rounded-3xl bg-[#f4f4f4] px-5 py-2.5 dark:bg-token-main-surface-secondary">{messageInfo.text}</div>
+														<div className="relative max-w-[90%] rounded-3xl bg-[#f4f4f4] px-5 py-2.5 dark:bg-token-main-surface-secondary">{message.text}</div>
 													</div>
 												</div>
 											</div>
@@ -64,14 +55,13 @@ const ChatMessages = ({ chatId }: Props) => {
 								</div>
 							</div>
 							<ReactMarkdown className="markdown prose dark:prose-invert dark w-full max-w-none break-words" remarkPlugins={[remarkGfm]}>
-								{messageInfo.text}
+								{message.text}
 							</ReactMarkdown>
 						</div>
 					</div>
 				);
 			})}
-			            <div ref={messagesEndRef} />
-
+			<div ref={messagesEndRef} />
 		</div>
 	);
 };
