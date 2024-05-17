@@ -3,6 +3,7 @@
 import AddFileIcon from "@/components/svg/AddFileIcon";
 import ButtonSend from "@/components/svg/ButtonSend";
 import { db } from "@/firebase";
+import { useModels } from "@/providers/ModelsProvider";
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 import { useSession } from "next-auth/react";
 import React, { useCallback } from "react";
@@ -19,12 +20,11 @@ type Props = {
 
 const FormInput = ({ chatId }: Props) => {
 	const { data: session } = useSession();
+	const { defaultModel } = useModels();
 
 	const { watch, handleSubmit, register, reset } = useForm<FormData>();
 
 	const watchMessage = watch("message");
-
-	const model = "gpt-3.5-turbo";
 
 	const onSubmit = useCallback(
 		async (data: FormData) => {
@@ -50,7 +50,7 @@ const FormInput = ({ chatId }: Props) => {
 				headers: {
 					"Content-Type": "application/json",
 				},
-				body: JSON.stringify({ prompt: text, chatId, model, session }),
+				body: JSON.stringify({ prompt: text, chatId, model: defaultModel, session }),
 			})
 				.then(async (res) => {
 					if (res.ok) {
@@ -67,7 +67,17 @@ const FormInput = ({ chatId }: Props) => {
 					toast.dismiss(notificationId);
 				});
 		},
-		[chatId, reset, session]
+		[chatId, defaultModel, reset, session]
+	);
+
+	const handlePressEnter = useCallback(
+		(event: React.KeyboardEvent<HTMLTextAreaElement>) => {
+			if (event.key === "Enter" && !event.shiftKey) {
+				event.preventDefault();
+				handleSubmit(onSubmit)();
+			}
+		},
+		[handleSubmit, onSubmit]
 	);
 
 	return (
@@ -95,11 +105,10 @@ const FormInput = ({ chatId }: Props) => {
 												{...register("message")}
 												id="prompt-textarea"
 												tabIndex={0}
-												data-id="root"
-												dir="auto"
 												rows={1}
 												placeholder="Message ChatGPT"
 												className="m-0 max-h-[25dvh] resize-none border-0 bg-transparent px-0 text-token-text-primary focus:ring-0 focus-visible:outline-none focus-visible:ring-0"
+												onKeyDown={handlePressEnter}
 											/>
 										</div>
 										<button
