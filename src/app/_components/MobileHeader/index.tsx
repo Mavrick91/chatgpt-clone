@@ -12,17 +12,9 @@ const MobileHeader = () => {
 				<span className="sr-only">Open sidebar</span>
 				<MenuIcon />
 			</button>
-			<button
-				aria-haspopup="menu"
-				aria-expanded="false"
-				data-state="closed"
-				className="group flex cursor-pointer items-center gap-1 overflow-hidden whitespace-nowrap rounded-lg px-3 py-1.5 text-lg font-medium text-token-text-secondary hover:bg-token-main-surface-secondary"
-			>
-				<div className="text-token-text-secondary">
-					ChatGPT <span className="text-token-text-secondary">4o</span>
-				</div>
-				<DropdownIcon />
-			</button>
+
+			<ModelChoice isMobile />
+
 			<div className="absolute inset-y-0 right-0 flex items-center">
 				<button type="button" className="px-3">
 					<NewIcon className="icon-lg mx-2.5 text-token-text-secondary" />

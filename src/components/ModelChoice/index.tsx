@@ -7,7 +7,7 @@ import { useCallback } from "react";
 import DropdownModel from "@/components/DropdownModel";
 import DropdownIcon from "@/components/svg/DropdownIcon";
 
-const ModelChoice = () => {
+const ModelChoice = ({ isMobile = false }: { isMobile?: boolean }) => {
 	const { isDropdownOpen, toggleDropdown, dropdownRef, buttonRef } = useClickOutside();
 	const { models, defaultModel, updateModel } = useModels();
 
@@ -38,44 +38,7 @@ const ModelChoice = () => {
 				<DropdownIcon />
 			</button>
 
-			{isDropdownOpen && (
-				<div
-					ref={dropdownRef}
-					className="fixed left-0 top-0 min-w-max"
-					style={{
-						transform: "translate(272px, 56px)",
-					}}
-				>
-					<div className="flex min-w-[340px] max-w-xs flex-col overflow-hidden rounded-2xl border border-token-border-light bg-token-main-surface-primary py-2" tabIndex={-1}>
-						<div className="mb-1 px-5 pb-0 pr-4 pt-2">
-							<span className="text-sm text-token-text-tertiary">Model</span>
-						</div>
-						<div className="flex max-h-72 flex-col overflow-y-auto">
-							{models.map((model) => (
-								<button
-									onClick={() => handleUpdateModel(model.id)}
-									key={model.id}
-									role="menuitem"
-									className="group relative m-1.5 mx-2 my-0 flex grow cursor-pointer items-center gap-2.5 rounded-md p-3 !pr-3 text-sm hover:bg-[#f5f5f5] focus-visible:bg-[#f5f5f5] focus-visible:outline-0 dark:hover:bg-token-main-surface-secondary dark:focus-visible:bg-token-main-surface-secondary"
-									tabIndex={-1}
-								>
-									<div className="flex grow items-center justify-between gap-2">
-										<div>
-											<div className="flex items-center gap-3">
-												<span className="flex size-7 shrink-0 items-center justify-center rounded-full bg-token-main-surface-secondary">
-													<BigModelIcon />
-												</span>
-												<div>{model.id}</div>
-											</div>
-										</div>
-										{model.id === defaultModel && <CheckMarkIcon />}
-									</div>
-								</button>
-							))}
-						</div>
-					</div>
-				</div>
-			)}
+			{isDropdownOpen && <DropdownModel isMobile={isMobile} defaultModel={defaultModel} handleUpdateModel={handleUpdateModel} models={models} ref={dropdownRef} />}
 		</div>
 	);
 };
