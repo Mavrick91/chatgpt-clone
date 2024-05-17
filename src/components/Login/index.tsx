@@ -1,6 +1,6 @@
 "use client";
 
-import GoogleLogo from "../svg/GoogleLogo";
+import GoogleLogo from "@/components/svg/GoogleLogo";
 import { signIn } from "next-auth/react";
 
 const Login = () => {

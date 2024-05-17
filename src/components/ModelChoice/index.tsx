@@ -4,9 +4,8 @@ import useClickOutside from "@/hooks/useClickOutside";
 import { useModels } from "@/providers/ModelsProvider";
 import classNames from "classnames";
 import { useCallback } from "react";
-import BigModelIcon from "../svg/BigModelIcon";
-import CheckMarkIcon from "../svg/CheckMarkIcon";
-import DropdownIcon from "../svg/DropdownIcon";
+import DropdownModel from "@/components/DropdownModel";
+import DropdownIcon from "@/components/svg/DropdownIcon";
 
 const ModelChoice = () => {
 	const { isDropdownOpen, toggleDropdown, dropdownRef, buttonRef } = useClickOutside();
