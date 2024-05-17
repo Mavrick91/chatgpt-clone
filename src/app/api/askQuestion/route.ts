@@ -1,8 +1,8 @@
-import admin from "firebase-admin";
-import query from "@/lib/queryApi";
-import type { NextApiRequest, NextApiResponse } from "next";
-import { NextResponse } from "next/server";
 import { adminDb } from "@/firebaseAdmin";
+import query from "@/lib/queryApi";
+import admin from "firebase-admin";
+import type { NextApiResponse } from "next";
+import { NextResponse } from "next/server";
 
 type ResponseData = {
 	answer: string;
@@ -38,6 +38,6 @@ export async function POST(req: Request, res: NextApiResponse<ResponseData>) {
 	} catch (error) {
 		console.error(error);
 
-		return NextResponse.json({ answer: error.message }, { status: 500 });
+		return NextResponse.json({}, { status: 500 });
 	}
 }
