@@ -1,5 +1,5 @@
 import { db } from "@/firebase";
-import { collection, deleteDoc, doc, query } from "firebase/firestore";
+import { collection, deleteDoc, doc, orderBy, query } from "firebase/firestore";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
@@ -18,7 +18,7 @@ const ChatRow = ({ id }: Props) => {
 	const { data: session } = useSession();
 	const [active, setActive] = useState(false);
 
-	const [messages] = useCollection(collection(db, "users", session?.user?.email!, "chats", id, "messages"));
+	const [messages] = useCollection(session && query(collection(db, "users", session?.user?.email!, "chats", id, "messages"), orderBy("createdAt")));
 
 	useEffect(() => {
 		if (pathname.includes(id)) {
@@ -42,7 +42,7 @@ const ChatRow = ({ id }: Props) => {
 			>
 				<Link href={`/chat/${id}`} className="flex items-center gap-2 p-2">
 					<div className="relative grow overflow-hidden whitespace-nowrap">
-						{messages?.docs.length ? messages.docs[0].data().text : "New chat"}
+						{messages?.docs.length ? messages?.docs[0].data().text : "New chat"}
 						<div
 							className={classNames("absolute inset-y-0 right-0 w-8 bg-gradient-to-l from-token-sidebar-surface-primary from-0% to-transparent group-hover:w-10", {
 								"w-10 from-token-sidebar-surface-secondary from-60%": active,
