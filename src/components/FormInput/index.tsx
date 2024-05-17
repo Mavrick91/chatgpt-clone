@@ -21,16 +21,16 @@ type Props = {
 const FormInput = ({ chatId }: Props) => {
 	const { data: session } = useSession();
 	const { defaultModel } = useModels();
-	const textAreaRef = useRef<HTMLTextAreaElement | null>(null);
 
 	const { watch, handleSubmit, register, reset } = useForm<FormData>();
 
 	const watchMessage = watch("message");
 
 	const adjustTextAreaHeight = useCallback(() => {
-		if (textAreaRef.current) {
-			textAreaRef.current.style.height = "auto";
-			textAreaRef.current.style.height = textAreaRef.current.scrollHeight + "px";
+		const textarea = document.getElementById("prompt-textarea") as HTMLTextAreaElement;
+		if (textarea) {
+			textarea.style.height = "auto";
+			textarea.style.height = `${textarea.scrollHeight}px`;
 		}
 	}, []);
 
@@ -39,37 +39,51 @@ const FormInput = ({ chatId }: Props) => {
 	}, [watchMessage, adjustTextAreaHeight]);
 
 	const onSubmit = useCallback(
-		async (data: FormData) => {
-			const notificationId = toast.loading("ChatGPT is thinking...");
-			reset();
+		async (formData: FormData) => {
+			if (!session) {
+				toast.error("You must be logged in to send a message.");
+				return;
+			}
 
-			const text = data.message.trim();
+			const notificationId = toast.loading("Sending your message...");
 
-			const message: Message = {
-				text,
-				createdAt: serverTimestamp(),
-				user: {
-					_id: session?.user?.email!,
-					name: session?.user?.name!,
-					avatar: session?.user?.image!,
-				},
-			};
+			try {
+				reset();
 
-			if (chatId) await addDoc(collection(db, "users", session?.user?.email!, "chats", chatId, "messages"), message);
+				const messageContent = formData.message.trim();
 
-			await fetch("/api/askQuestion", {
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-				},
-				body: JSON.stringify({ prompt: text, chatId, model: defaultModel, session }),
-			})
-				.catch(() => {
-					toast.error("An error occurred. Please try again later.");
-				})
-				.finally(() => {
-					toast.dismiss(notificationId);
+				const message: Message = {
+					text: messageContent,
+					createdAt: serverTimestamp(),
+					user: {
+						_id: session.user?.email!,
+						name: session.user?.name!,
+						avatar: session.user?.image!,
+					},
+				};
+
+				if (chatId) {
+					await addDoc(collection(db, "users", session.user?.email!, "chats", chatId, "messages"), message);
+				}
+
+				await fetch("/api/askQuestion", {
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json",
+					},
+					body: JSON.stringify({
+						prompt: messageContent,
+						chatId,
+						model: defaultModel,
+						session,
+					}),
 				});
+			} catch (error) {
+				console.error("Error sending message:", error);
+				toast.error("An error occurred while sending your message.");
+			} finally {
+				toast.dismiss(notificationId);
+			}
 		},
 		[chatId, defaultModel, reset, session]
 	);
@@ -110,7 +124,6 @@ const FormInput = ({ chatId }: Props) => {
 												id="prompt-textarea"
 												tabIndex={0}
 												rows={1}
-												ref={textAreaRef}
 												placeholder="Message ChatGPT"
 												className="m-0 max-h-[25dvh] resize-none border-0 bg-transparent px-0 text-token-text-primary focus:ring-0 focus-visible:outline-none focus-visible:ring-0"
 												onKeyDown={handlePressEnter}
