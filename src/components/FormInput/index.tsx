@@ -1,5 +1,6 @@
 "use client";
 
+import { askQuestion } from "@/actions/ask-question";
 import AddFileIcon from "@/components/svg/AddFileIcon";
 import ButtonSend from "@/components/svg/ButtonSend";
 import { db } from "@/firebase";
@@ -45,7 +46,7 @@ const FormInput = ({ chatId }: Props) => {
 				return;
 			}
 
-			const notificationId = toast.loading("Sending your message...");
+			const notificationId = toast.loading("ChatGPT is thinking...");
 
 			try {
 				reset();
@@ -66,18 +67,7 @@ const FormInput = ({ chatId }: Props) => {
 					await addDoc(collection(db, "users", session.user?.email!, "chats", chatId, "messages"), message);
 				}
 
-				await fetch("/api/askQuestion", {
-					method: "POST",
-					headers: {
-						"Content-Type": "application/json",
-					},
-					body: JSON.stringify({
-						prompt: messageContent,
-						chatId,
-						model: defaultModel,
-						session,
-					}),
-				});
+				await askQuestion(messageContent, chatId!, session.user?.email!, defaultModel);
 			} catch (error) {
 				console.error("Error sending message:", error);
 				toast.error("An error occurred while sending your message.");

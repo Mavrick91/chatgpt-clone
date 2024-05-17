@@ -2,6 +2,7 @@
 
 import React, { createContext, useCallback, useContext, useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
+import { getModels } from "@/actions/get-models";
 
 type ModelsContextType = {
 	models: Model[];
@@ -15,7 +16,7 @@ const ModelsProvider = ({ children }: { children: React.ReactNode }) => {
 	const [defaultModel, setDefaultModel] = useState<string>("");
 	const { data: models, isLoading } = useQuery({
 		queryKey: ["models"],
-		queryFn: () => fetch("/api/getModels").then((res) => res.json()),
+		queryFn: () => getModels(),
 	});
 
 	useEffect(() => {
@@ -42,7 +43,7 @@ const ModelsProvider = ({ children }: { children: React.ReactNode }) => {
 	return (
 		<ModelsContext.Provider
 			value={{
-				models,
+				models: models || [],
 				defaultModel,
 				updateModel,
 			}}
