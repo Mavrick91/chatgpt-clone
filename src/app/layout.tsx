@@ -4,6 +4,7 @@ import "./globals.css";
 import Providers from "../Provider";
 import Header from "./_components/Header";
 import SideBar from "./_components/SideBar";
+import DesktopHeader from "./_components/DesktopHeader";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -25,7 +26,14 @@ export default function RootLayout({
 						<SideBar />
 						<div className="relative flex h-full max-w-full flex-1 flex-col overflow-hidden">
 							<Header />
-							{children}
+							<main className="transition-width relative size-full flex-1 overflow-auto">
+								<div role="presentation" tabIndex={0} className="flex h-full flex-col focus-visible:outline-0">
+									<div className="flex-1 overflow-hidden">
+										<DesktopHeader />
+										{children}
+									</div>
+								</div>
+							</main>
 						</div>
 					</div>
 				</Providers>

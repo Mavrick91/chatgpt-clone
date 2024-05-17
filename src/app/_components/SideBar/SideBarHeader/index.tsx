@@ -16,6 +16,7 @@ const SideBarHeader = () => {
 		const doc = await addDoc(collection(db, "users", session?.user?.email!, "chats"), {
 			userId: session?.user?.email,
 			createdAt: serverTimestamp(),
+			messages: [],
 		});
 
 		router.push(`/chat/${doc.id}`);

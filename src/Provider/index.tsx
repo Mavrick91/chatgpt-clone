@@ -1,15 +1,27 @@
 import Login from "@/components/Login";
-import { SessionProvider } from "@/providers/SessionProvider";
+import ModelsProvider from "@/providers/ModelsProvider";
+import QueryClientProvider from "@/providers/QueryClientProvider";
+import SessionProvider from "@/providers/SessionProvider";
 import ThemeProvider from "@/providers/ThemeProvider";
+import ToastProvider from "@/providers/ToastProvider";
+
 import { getServerSession } from "next-auth";
-import React from "react";
 
 const Providers = async ({ children }: { children: React.ReactNode }) => {
 	const session = await getServerSession();
 
 	return (
 		<ThemeProvider>
-			<SessionProvider session={session}>{!session ? <Login /> : children}</SessionProvider>
+			<ToastProvider />
+			<SessionProvider session={session}>
+				{!session ? (
+					<Login />
+				) : (
+					<QueryClientProvider>
+						<ModelsProvider>{children}</ModelsProvider>
+					</QueryClientProvider>
+				)}
+			</SessionProvider>
 		</ThemeProvider>
 	);
 };
