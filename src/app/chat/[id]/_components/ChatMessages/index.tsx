@@ -1,5 +1,4 @@
 import ChatGPTLogo from "@/components/svg/ChatGPTLogo";
-import { DocumentData } from "firebase/firestore";
 import "github-markdown-css/github-markdown.css";
 import { useSession } from "next-auth/react";
 import { useEffect, useRef } from "react";
@@ -7,10 +6,10 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 
 type Props = {
-	messages: DocumentData[] | undefined;
+	conversation: SideBarConversation;
 };
 
-const ChatMessages = ({ messages }: Props) => {
+const ChatMessages = ({ conversation }: Props) => {
 	const { data: session } = useSession();
 	const messagesEndRef = useRef<HTMLDivElement | null>(null);
 
@@ -18,14 +17,14 @@ const ChatMessages = ({ messages }: Props) => {
 		if (messagesEndRef.current) {
 			messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
 		}
-	}, [messages]);
+	}, [conversation]);
 
 	return (
 		<div className="size-full overflow-y-auto overflow-x-hidden">
-			{messages?.map((message) => {
+			{conversation.messages.map((message) => {
 				if (message.user._id === session?.user?.email)
 					return (
-						<div key={message.id} className="w-full text-token-text-primary">
+						<div key={message.createdAt.seconds} className="w-full text-token-text-primary">
 							<div className="m-auto px-3 py-[18px] text-base md:px-5 lg:px-1 xl:px-5">
 								<div className="mx-auto flex flex-1 gap-4 text-base md:max-w-3xl md:gap-6 lg:max-w-[40rem] xl:max-w-3xl">
 									<div className="group/conversation-turn relative flex w-full min-w-0 flex-col">
@@ -45,7 +44,7 @@ const ChatMessages = ({ messages }: Props) => {
 					);
 
 				return (
-					<div key={message.id} className="m-auto px-3 py-[18px] text-base md:px-5 lg:px-1 xl:px-5">
+					<div key={message.createdAt.seconds} className="m-auto px-3 py-[18px] text-base md:px-5 lg:px-1 xl:px-5">
 						<div className="mx-auto flex flex-1 gap-4 text-base md:max-w-3xl md:gap-6 lg:max-w-[40rem] xl:max-w-3xl">
 							<div className="relative flex shrink-0 flex-col items-end">
 								<div className="pt-1">

@@ -1,4 +1,4 @@
-interface Message {
+type Message = {
 	text: string;
 	createdAt: admin.firestore.Timestamp;
 	user: {
@@ -6,7 +6,7 @@ interface Message {
 		name: string;
 		avatar: string;
 	};
-}
+};
 
 type Model = {
 	id: string;
@@ -18,4 +18,11 @@ type Model = {
 type Models = {
 	object: "list";
 	data: Model[];
+};
+
+type SideBarConversation = {
+	userId: string;
+	messages: Message[];
+	createdAt: admin.firestore.Timestamp;
+	id: string;
 };

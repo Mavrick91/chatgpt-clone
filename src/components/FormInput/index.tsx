@@ -3,12 +3,14 @@
 import { askQuestion } from "@/actions/ask-question";
 import AddFileIcon from "@/components/svg/AddFileIcon";
 import ButtonSend from "@/components/svg/ButtonSend";
-import { db } from "@/firebase";
 import { useCreateChat } from "@/hooks/useCreateChat";
+import { useSendMessage } from "@/hooks/useSendMessage";
+import { useUpdateConversation } from "@/hooks/useUpdateConversation";
 import { useModels } from "@/providers/ModelsProvider";
-import { addDoc, collection, serverTimestamp } from "firebase/firestore";
+import { useQueryClient } from "@tanstack/react-query";
+import { serverTimestamp } from "firebase/firestore";
 import { useSession } from "next-auth/react";
-import React, { useCallback, useEffect, useRef } from "react";
+import React, { useCallback, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 
@@ -24,6 +26,9 @@ const FormInput = ({ chatId }: Props) => {
 	const { data: session } = useSession();
 	const { defaultModel } = useModels();
 	const createNewChat = useCreateChat();
+	const sendMessage = useSendMessage();
+	const updateConversation = useUpdateConversation();
+	const queryClient = useQueryClient();
 
 	const { watch, handleSubmit, register, reset } = useForm<FormData>();
 
@@ -68,12 +73,22 @@ const FormInput = ({ chatId }: Props) => {
 				let newChatId: string | undefined;
 
 				if (!chatId) {
+					queryClient.setQueryData(["first-message"], {
+						userId: session.user?.email!,
+						createdAt: serverTimestamp(),
+						messages: [{ id: "1", ...message }],
+					});
+
 					newChatId = await createNewChat();
 				}
 
-				if (chatId || newChatId) await addDoc(collection(db, "users", session.user?.email!, "chats", newChatId || chatId || "", "messages"), message);
+				if (chatId || newChatId) {
+					await sendMessage(newChatId || chatId!, message);
+				}
 
-				await askQuestion(messageContent, newChatId || chatId!, session.user?.email!, defaultModel);
+				const answer = await askQuestion(messageContent, newChatId || chatId!, session.user?.email!, defaultModel);
+				const parsedAnswer = JSON.parse(answer);
+				updateConversation(newChatId || chatId!, parsedAnswer);
 			} catch (error) {
 				console.error("Error sending message:", error);
 				toast.error("An error occurred while sending your message.");
@@ -81,7 +96,7 @@ const FormInput = ({ chatId }: Props) => {
 				toast.dismiss(notificationId);
 			}
 		},
-		[chatId, createNewChat, defaultModel, reset, session]
+		[chatId, createNewChat, defaultModel, queryClient, reset, sendMessage, session, updateConversation]
 	);
 
 	const handlePressEnter = useCallback(

@@ -1,24 +1,41 @@
+"use client";
+
+import DeleteChatIcon from "@/components/svg/DeleteChatIcon";
 import { db } from "@/firebase";
-import { collection, deleteDoc, doc, orderBy, query } from "firebase/firestore";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import classNames from "classnames";
+import { doc, deleteDoc as firebaseDeleteDoc } from "firebase/firestore";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import React, { useCallback, useEffect, useState } from "react";
-import { useCollection } from "react-firebase-hooks/firestore";
-import classNames from "classnames";
-import DeleteChatIcon from "@/components/svg/DeleteChatIcon";
+import { useEffect, useState } from "react";
 
 type Props = {
 	id: string;
+	displayMessage: string;
 };
 
-const ChatRow = ({ id }: Props) => {
+const ChatRow = ({ id, displayMessage }: Props) => {
+	const queryClient = useQueryClient();
 	const pathname = usePathname();
 	const router = useRouter();
 	const { data: session } = useSession();
 	const [active, setActive] = useState(false);
 
-	const [messages] = useCollection(session && query(collection(db, "users", session?.user?.email!, "chats", id, "messages"), orderBy("createdAt")));
+	const { mutate: deleteDoc } = useMutation<void, Error>({
+		mutationFn: async () => {
+			return firebaseDeleteDoc(doc(db, "users", session?.user?.email!, "chats", id));
+		},
+		onMutate() {
+			if (active) router.replace("/");
+
+			const currentData = queryClient.getQueryData(["sideBarConversation", session?.user?.email]) as SideBarConversation[];
+			const updatedData = currentData.filter((conversation) => conversation.id !== id);
+
+			queryClient.setQueryData(["sideBarConversation", session?.user?.email], updatedData);
+			queryClient.setQueryData(["first-message"], null);
+		},
+	});
 
 	useEffect(() => {
 		if (pathname.includes(id)) {
@@ -27,11 +44,6 @@ const ChatRow = ({ id }: Props) => {
 			setActive(false);
 		}
 	}, [pathname, router, id]);
-
-	const handleClickDeleteChat = useCallback(() => {
-		deleteDoc(doc(db, "users", session?.user?.email!, "chats", id));
-		if (active) router.replace("/");
-	}, [session?.user?.email, id, active, router]);
 
 	return (
 		<li className="relative mt-2">
@@ -42,7 +54,7 @@ const ChatRow = ({ id }: Props) => {
 			>
 				<Link href={`/chat/${id}`} className="flex items-center gap-2 p-2">
 					<div className="relative grow overflow-hidden whitespace-nowrap">
-						{messages?.docs.length ? messages?.docs[0].data().text : "New chat"}
+						{displayMessage}
 						<div
 							className={classNames("absolute inset-y-0 right-0 w-8 bg-gradient-to-l from-token-sidebar-surface-primary from-0% to-transparent group-hover:w-10", {
 								"w-10 from-token-sidebar-surface-secondary from-60%": active,
@@ -53,7 +65,7 @@ const ChatRow = ({ id }: Props) => {
 				</Link>
 				<div className={classNames("absolute inset-y-0 right-0 items-center gap-1.5 pr-2 group-hover:flex", { flex: active, hidden: !active })}>
 					<button
-						onClick={handleClickDeleteChat}
+						onClick={() => deleteDoc()}
 						className="flex items-center justify-center text-token-text-secondary transition hover:text-red-500"
 						aria-haspopup="menu"
 						aria-expanded="false"

@@ -5,8 +5,10 @@ import { useSession } from "next-auth/react";
 import { db } from "@/firebase";
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 import { useRouter } from "next/navigation";
+import { useQueryClient } from "@tanstack/react-query";
 
 export const useCreateChat = () => {
+	const queryClient = useQueryClient();
 	const router = useRouter();
 	const { data: session } = useSession();
 
@@ -21,6 +23,29 @@ export const useCreateChat = () => {
 				userId: session.user.email,
 				createdAt: serverTimestamp(),
 				messages: [],
+			});
+
+			queryClient.setQueryData(["sideBarConversation", session.user.email], (oldData: SideBarConversation[] | undefined) => {
+				if (!oldData) {
+					return [
+						{
+							id: doc.id,
+							userId: session?.user?.email,
+							createdAt: serverTimestamp(),
+							messages: [],
+						},
+					];
+				}
+
+				return [
+					...oldData,
+					{
+						id: doc.id,
+						userId: session?.user?.email,
+						createdAt: serverTimestamp(),
+						messages: [],
+					},
+				];
 			});
 
 			router.push(`/chat/${doc.id}`);

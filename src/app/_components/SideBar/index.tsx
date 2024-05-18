@@ -1,8 +1,21 @@
+import { fetchSideBarConversation } from "@/actions/fetch-sidebar-conversation";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { getServerSession } from "next-auth/next";
 import SideBarConversation from "./SideBarConversation";
 import SideBarHeader from "./SideBarHeader";
 import SideBarUser from "./SideBarUser";
+import { HydrationBoundary, QueryClient, dehydrate } from "@tanstack/react-query";
 
-const SideBar = () => {
+const SideBar = async () => {
+	const queryClient = new QueryClient();
+
+	const session = await getServerSession(authOptions);
+
+	await queryClient.prefetchQuery({
+		queryKey: ["sideBarConversation", session?.user?.email],
+		queryFn: () => fetchSideBarConversation(session?.user?.email),
+	});
+
 	return (
 		<div className="hidden shrink-0 overflow-x-hidden bg-token-sidebar-surface-primary md:block">
 			<div className="h-full w-[260px]">
@@ -11,7 +24,9 @@ const SideBar = () => {
 						<div className="relative size-full flex-1 items-start border-white/20">
 							<nav className="flex size-full flex-col px-3 pb-3.5">
 								<SideBarHeader />
-								<SideBarConversation />
+								<HydrationBoundary state={dehydrate(queryClient)}>
+									<SideBarConversation />
+								</HydrationBoundary>
 								<SideBarUser />
 							</nav>
 						</div>

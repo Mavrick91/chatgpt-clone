@@ -1,26 +1,36 @@
 "use client";
 
 import FormInput from "@/components/FormInput";
-import ChatMessages from "./_components/ChatMessages";
-import { useCollection } from "react-firebase-hooks/firestore";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
-import { db } from "@/firebase";
-import { query, collection, orderBy } from "firebase/firestore";
-import Spinner from "@/components/Spinner";
-import HomePageLogo from "@/app/_components/HomePageLogo";
+import ChatMessages from "./_components/ChatMessages";
+import { useEffect } from "react";
 
 const Chat = ({ params }: NextPageProps) => {
+	const queryClient = useQueryClient();
 	const chatId = params.id;
 	const { data: session } = useSession();
+	const { data: conversations } = useQuery<SideBarConversation[]>({
+		queryKey: ["sideBarConversation", session?.user?.email],
+	});
+	const { data: firstMessage } = useQuery<SideBarConversation>({
+		queryKey: ["first-message"],
+	});
 
-	const [messages, loading] = useCollection(session && query(collection(db, "users", session?.user?.email!, "chats", chatId, "messages"), orderBy("createdAt")));
+	let conversation = conversations?.find((conversation) => conversation.id === chatId);
 
-	const messagesArray = messages?.docs.map((message) => message.data());
+	if (firstMessage && !conversation) {
+		conversation = firstMessage;
+	}
+
+	useEffect(() => {
+		queryClient.setQueryData(["first-message"], null);
+	}, [queryClient]);
 
 	return (
 		<div className="relative flex h-full flex-col">
 			<div className="flex h-0 grow flex-col items-center justify-center text-token-text-primary">
-				{loading ? <Spinner /> : messagesArray?.length ? <ChatMessages messages={messagesArray} /> : <HomePageLogo />}
+				{conversation?.messages.length ? <ChatMessages conversation={conversation} /> : null}
 			</div>
 			<FormInput chatId={chatId} />
 		</div>

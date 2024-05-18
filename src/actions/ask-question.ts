@@ -34,5 +34,5 @@ export async function askQuestion(prompt: string, chatId: string, email: string,
 
 	await adminDb.collection("users").doc(email).collection("chats").doc(chatId).collection("messages").add(message);
 
-	return text;
+	return JSON.stringify(message);
 }
