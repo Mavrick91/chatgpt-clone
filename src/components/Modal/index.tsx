@@ -14,7 +14,7 @@ const Modal = ({ isVisible, onClose, children }: ModalProps) => {
 				<>
 					<motion.div className="fixed inset-0 z-40 bg-black/50" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={onClose} />
 					<motion.div
-						className="fixed inset-0 z-50 flex items-center justify-center"
+						className="fixed inset-0 z-50 mx-5 flex items-center justify-center"
 						initial={{ opacity: 0, scale: 0.8 }}
 						animate={{ opacity: 1, scale: 1 }}
 						exit={{ opacity: 0, scale: 0.8 }}

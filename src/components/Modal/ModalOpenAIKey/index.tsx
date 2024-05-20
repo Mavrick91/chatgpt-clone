@@ -32,7 +32,7 @@ const ModalOpenAIKey = () => {
 
 	return (
 		<Modal isVisible={!key}>
-			<div className="flex w-[500px] flex-col px-5 py-3">
+			<div className="flex max-w-[500px] flex-col px-5 py-3">
 				<h1 className="mb-2 text-3xl ">Enter API key</h1>
 				<p className="text-sm text-token-text-secondary">
 					{`To use our platform, you'll need to provide your API key. This allows us to securely authenticate your requests and provide you with the best possible experience.`}
@@ -43,6 +43,7 @@ const ModalOpenAIKey = () => {
 							API Key
 						</label>
 						<input
+							autoComplete="off"
 							autoFocus
 							{...register("apiKey")}
 							className="col-span-3 rounded-3xl bg-token-main-surface-secondary p-1.5 pl-3.5 text-token-text-primary focus-visible:outline-none focus-visible:ring-0"
