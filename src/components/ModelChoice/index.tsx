@@ -1,11 +1,11 @@
 "use client";
 
+import DropdownModel from "@/components/DropdownModel";
+import DropdownIcon from "@/components/svg/DropdownIcon";
 import useClickOutside from "@/hooks/useClickOutside";
 import { useModels } from "@/providers/ModelsProvider";
 import classNames from "classnames";
 import { useCallback } from "react";
-import DropdownModel from "@/components/DropdownModel";
-import DropdownIcon from "@/components/svg/DropdownIcon";
 
 const ModelChoice = ({ isMobile = false }: { isMobile?: boolean }) => {
 	const { isDropdownOpen, toggleDropdown, dropdownRef, buttonRef } = useClickOutside();

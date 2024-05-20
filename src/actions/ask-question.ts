@@ -1,10 +1,14 @@
 "use server";
 
-import { openai } from "@/lib/chatgpt";
 import admin from "firebase-admin";
 import { adminDb } from "@/firebaseAdmin";
+import OpenAI from "openai";
 
-export async function askQuestion(prompt: string, chatId: string, email: string, model: string) {
+export async function askQuestion(prompt: string, chatId: string, email: string, model: string, key: string) {
+	const openai = new OpenAI({
+		apiKey: key,
+	});
+
 	const response = await openai.chat.completions.create({
 		model,
 		messages: [{ role: "user", content: prompt }],

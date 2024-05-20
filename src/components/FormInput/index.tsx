@@ -6,6 +6,7 @@ import { useCreateChat } from "@/hooks/useCreateChat";
 import { useSendMessage } from "@/hooks/useSendMessage";
 import { useUpdateConversation } from "@/hooks/useUpdateConversation";
 import { useModels } from "@/providers/ModelsProvider";
+import { useOpenAI } from "@/providers/OpenAIProvider";
 import { useQueryClient } from "@tanstack/react-query";
 import { serverTimestamp } from "firebase/firestore";
 import { useSession } from "next-auth/react";
@@ -23,11 +24,12 @@ type Props = {
 
 const FormInput = ({ chatId }: Props) => {
 	const { data: session } = useSession();
-	const { defaultModel } = useModels();
+	const { defaultModel, models } = useModels();
 	const createNewChat = useCreateChat();
 	const sendMessage = useSendMessage();
 	const updateConversation = useUpdateConversation();
 	const queryClient = useQueryClient();
+	const { key } = useOpenAI();
 
 	const { watch, handleSubmit, register, reset } = useForm<FormData>();
 
@@ -85,7 +87,7 @@ const FormInput = ({ chatId }: Props) => {
 					await sendMessage(newChatId || chatId!, message);
 				}
 
-				const answer = await askQuestion(messageContent, newChatId || chatId!, session.user?.email!, defaultModel);
+				const answer = await askQuestion(messageContent, newChatId || chatId!, session.user?.email!, defaultModel, key!);
 				const parsedAnswer = JSON.parse(answer);
 				updateConversation(newChatId || chatId!, parsedAnswer);
 			} catch (error) {
@@ -95,17 +97,17 @@ const FormInput = ({ chatId }: Props) => {
 				toast.dismiss(notificationId);
 			}
 		},
-		[chatId, createNewChat, defaultModel, queryClient, reset, sendMessage, session, updateConversation]
+		[chatId, createNewChat, defaultModel, key, queryClient, reset, sendMessage, session, updateConversation]
 	);
 
 	const handlePressEnter = useCallback(
 		(event: React.KeyboardEvent<HTMLTextAreaElement>) => {
-			if (event.key === "Enter" && !event.shiftKey && !!watchMessage.trim()) {
+			if (event.key === "Enter" && !event.shiftKey && !!watchMessage.trim() && models.length) {
 				event.preventDefault();
 				handleSubmit(onSubmit)();
 			}
 		},
-		[handleSubmit, onSubmit, watchMessage]
+		[handleSubmit, models.length, onSubmit, watchMessage]
 	);
 
 	return (
@@ -131,7 +133,7 @@ const FormInput = ({ chatId }: Props) => {
 										</div>
 										<button
 											type="submit"
-											disabled={!watchMessage || !session}
+											disabled={!watchMessage || !session || !models.length}
 											className="mb-1 mr-1 flex size-8 items-center justify-center rounded-full bg-black text-white transition-colors hover:opacity-70 focus-visible:outline-none focus-visible:outline-black disabled:bg-[#D7D7D7] disabled:text-[#f4f4f4] disabled:hover:opacity-100 dark:bg-white dark:text-black dark:focus-visible:outline-white disabled:dark:bg-token-text-quaternary dark:disabled:text-token-main-surface-secondary"
 										>
 											<ButtonSend />

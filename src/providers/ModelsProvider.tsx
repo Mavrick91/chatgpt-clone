@@ -3,6 +3,7 @@
 import React, { createContext, useCallback, useContext, useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { getModels } from "@/actions/get-models";
+import { useOpenAI } from "./OpenAIProvider";
 
 type ModelsContextType = {
 	models: Model[];
@@ -14,9 +15,16 @@ const ModelsContext = createContext<undefined | ModelsContextType>(undefined);
 
 const ModelsProvider = ({ children }: { children: React.ReactNode }) => {
 	const [defaultModel, setDefaultModel] = useState<string>("");
-	const { data: models, isLoading } = useQuery({
+	const { key, updateKey } = useOpenAI();
+
+	const {
+		data: models,
+		isLoading,
+		isError,
+	} = useQuery({
 		queryKey: ["models"],
-		queryFn: () => getModels(),
+		queryFn: () => getModels(key!),
+		enabled: !!key,
 	});
 
 	useEffect(() => {
@@ -30,6 +38,12 @@ const ModelsProvider = ({ children }: { children: React.ReactNode }) => {
 			}
 		}
 	}, [models]);
+
+	useEffect(() => {
+		if (isError) {
+			updateKey();
+		}
+	}, [isError, updateKey]);
 
 	const updateModel = useCallback((model: string) => {
 		sessionStorage.setItem("default-model", model);

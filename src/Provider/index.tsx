@@ -1,5 +1,6 @@
 import Login from "@/components/Login";
 import ModelsProvider from "@/providers/ModelsProvider";
+import { OpenAIProvider } from "@/providers/OpenAIProvider";
 import QueryClientProvider from "@/providers/QueryClientProvider";
 import SessionProvider from "@/providers/SessionProvider";
 import ThemeProvider from "@/providers/ThemeProvider";
@@ -18,7 +19,9 @@ const Providers = async ({ children }: { children: React.ReactNode }) => {
 					<Login />
 				) : (
 					<QueryClientProvider>
-						<ModelsProvider>{children}</ModelsProvider>
+						<OpenAIProvider>
+							<ModelsProvider>{children}</ModelsProvider>
+						</OpenAIProvider>
 					</QueryClientProvider>
 				)}
 			</SessionProvider>

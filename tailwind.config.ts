@@ -15,6 +15,7 @@ const config: Config = {
 				"token-border-light": "var(--border-light)",
 				"token-sidebar-surface-primary": "var(--sidebar-surface-primary)",
 				"token-sidebar-surface-secondary": "var(--sidebar-surface-secondary)",
+				medium: "var(--border-medium)",
 			},
 		},
 	},
