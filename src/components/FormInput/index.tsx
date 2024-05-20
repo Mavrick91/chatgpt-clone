@@ -1,7 +1,6 @@
 "use client";
 
 import { askQuestion } from "@/actions/ask-question";
-import AddFileIcon from "@/components/svg/AddFileIcon";
 import ButtonSend from "@/components/svg/ButtonSend";
 import { useCreateChat } from "@/hooks/useCreateChat";
 import { useSendMessage } from "@/hooks/useSendMessage";

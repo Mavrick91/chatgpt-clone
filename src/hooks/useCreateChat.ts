@@ -54,7 +54,7 @@ export const useCreateChat = () => {
 		} catch (error) {
 			console.error("Failed to create a new chat:", error);
 		}
-	}, [router, session?.user?.email]);
+	}, [queryClient, router, session?.user?.email]);
 
 	return createNewChat;
 };
