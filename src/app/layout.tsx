@@ -20,15 +20,15 @@ export default function RootLayout({
 }>) {
 	return (
 		<html lang="en" className="dark">
-			<body className={inter.className}>
+			<body className={`${inter.className} h-dvh`}>
 				<Providers>
-					<div className="relative z-0 flex size-full overflow-hidden">
+					<div className="relative z-0 flex size-full overflow-hidden ">
 						<SideBar />
 						<div className="relative flex h-full max-w-full flex-1 flex-col overflow-hidden">
 							<MobileHeader />
 							<main className="transition-width relative size-full flex-1 overflow-auto">
 								<div role="presentation" tabIndex={0} className="flex h-full flex-col focus-visible:outline-0">
-									<div className="flex flex-1 flex-col overflow-hidden">
+									<div className="flex h-full flex-1 flex-col overflow-hidden">
 										<DesktopHeader />
 										{children}
 									</div>

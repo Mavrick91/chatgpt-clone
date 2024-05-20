@@ -3,7 +3,7 @@ import Welcome from "./_components/Welcome";
 
 export default function Home() {
 	return (
-		<div className="relative flex h-full flex-col">
+		<div className="relative flex grow flex-col">
 			<Welcome />
 			{/* <HomePageLogo /> */}
 

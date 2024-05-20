@@ -32,7 +32,7 @@ const ChatMessages = ({ conversation }: Props) => {
 											<div className="flex max-w-full grow flex-col">
 												<div className="flex min-h-[20px] w-full flex-col items-end gap-2 overflow-x-auto whitespace-pre-wrap break-words [.text-message+&]:mt-5">
 													<div className="flex w-full flex-col items-end gap-1 empty:hidden rtl:items-start">
-														<div className="relative max-w-[90%] rounded-3xl bg-[#f4f4f4] px-5 py-2.5 dark:bg-token-main-surface-secondary">{message.text}</div>
+														<div className="relative max-w-[90%] rounded-3xl bg-token-main-surface-secondary px-5 py-2.5">{message.text}</div>
 													</div>
 												</div>
 											</div>

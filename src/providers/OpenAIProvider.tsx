@@ -31,7 +31,6 @@ export const OpenAIProvider: React.FC<OpenAIProviderProps> = ({ children }) => {
 	return (
 		<OpenAIContext.Provider value={{ key, updateKey }}>
 			<ModalOpenAIKey />
-
 			{children}
 		</OpenAIContext.Provider>
 	);

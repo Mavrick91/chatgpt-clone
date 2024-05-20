@@ -29,10 +29,10 @@ const DropdownModel = forwardRef<HTMLDivElement, Props>(({ models, handleUpdateM
 							onClick={() => handleUpdateModel(model.id)}
 							key={model.id}
 							role="menuitem"
-							className="group relative m-1.5 mx-2 my-0 flex grow cursor-pointer items-center gap-2.5 rounded-md p-3 !pr-3 text-sm hover:bg-[#f5f5f5] focus-visible:bg-[#f5f5f5] focus-visible:outline-0 dark:hover:bg-token-main-surface-secondary dark:focus-visible:bg-token-main-surface-secondary"
+							className="group relative m-1.5 mx-2 my-0 flex grow cursor-pointer items-center gap-2.5 rounded-md p-3 !pr-3 text-sm hover:bg-token-main-surface-secondary focus-visible:bg-token-main-surface-secondary focus-visible:outline-0"
 							tabIndex={-1}
 						>
-							<div className="flex grow items-center justify-between gap-2">
+							<div className="flex grow items-center justify-between gap-2 text-white">
 								<div>
 									<div className="flex items-center gap-3">
 										<span className="flex size-7 shrink-0 items-center justify-center rounded-full bg-token-main-surface-secondary">

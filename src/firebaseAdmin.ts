@@ -13,6 +13,7 @@ const serviceAccount = {
 	auth_provider_x509_cert_url: process.env.GOOGLE_AUTH_PROVIDER_X509_CERT_URL,
 	client_x509_cert_url: process.env.GOOGLE_CLIENT_X509_CERT_URL,
 };
+console.log("🚀 ~ serviceAccount:", serviceAccount.private_key);
 
 if (!getApps().length) {
 	admin.initializeApp({

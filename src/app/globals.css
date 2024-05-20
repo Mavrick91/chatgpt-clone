@@ -11,6 +11,10 @@ main {
 	height: 100%;
 }
 
+.border-debug {
+	@apply border border-red-500;
+}
+
 .social-btn {
 	position: relative;
 	width: 320px;

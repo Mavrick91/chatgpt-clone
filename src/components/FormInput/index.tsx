@@ -111,13 +111,13 @@ const FormInput = ({ chatId }: Props) => {
 	);
 
 	return (
-		<div className="w-full md:w-[calc(100%-.5rem)] md:border-transparent md:pt-0 dark:border-white/20 md:dark:border-transparent">
+		<div className="w-full border-white/20 md:w-[calc(100%-.5rem)] md:border-transparent md:pt-0">
 			<div className="m-auto px-3 text-base md:px-5 lg:px-1 xl:px-5">
 				<div className="mx-auto flex flex-1 gap-4 text-base md:max-w-3xl md:gap-6 lg:max-w-[40rem] xl:max-w-3xl">
 					<form className="w-full" onSubmit={handleSubmit(onSubmit)}>
 						<div className="relative flex h-full max-w-full flex-1 flex-col">
 							<div className="flex w-full items-center">
-								<div className="flex w-full flex-col gap-1.5 rounded-[26px] bg-[#f4f4f4] p-1.5 transition-colors dark:bg-token-main-surface-secondary">
+								<div className="flex w-full flex-col gap-1.5 rounded-[26px] bg-token-main-surface-secondary p-1.5 transition-colors">
 									<div className="flex items-center gap-1.5 md:gap-3.5">
 										<div className="ml-3.5 flex min-w-0 flex-1 flex-col">
 											<textarea
@@ -134,7 +134,7 @@ const FormInput = ({ chatId }: Props) => {
 										<button
 											type="submit"
 											disabled={!watchMessage || !session || !models.length}
-											className="mb-1 mr-1 flex size-8 items-center justify-center rounded-full bg-black text-white transition-colors hover:opacity-70 focus-visible:outline-none focus-visible:outline-black disabled:bg-[#D7D7D7] disabled:text-[#f4f4f4] disabled:hover:opacity-100 dark:bg-white dark:text-black dark:focus-visible:outline-white disabled:dark:bg-token-text-quaternary dark:disabled:text-token-main-surface-secondary"
+											className="mb-1 mr-1 flex size-8 items-center justify-center rounded-full bg-white text-black transition-colors hover:opacity-70 focus-visible:outline-none disabled:bg-token-text-quaternary disabled:text-token-main-surface-secondary disabled:hover:opacity-100"
 										>
 											<ButtonSend />
 										</button>
