@@ -1,10 +1,10 @@
 import { fetchSideBarConversation } from "@/actions/fetch-sidebar-conversation";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { getServerSession } from "next-auth/next";
 import SideBarConversation from "./SideBarConversation";
 import SideBarHeader from "./SideBarHeader";
 import SideBarUser from "./SideBarUser";
 import { HydrationBoundary, QueryClient, dehydrate } from "@tanstack/react-query";
+import { authOptions } from "@/lib/auth";
 
 const SideBar = async () => {
 	const queryClient = new QueryClient();
