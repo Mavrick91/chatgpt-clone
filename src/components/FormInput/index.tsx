@@ -118,18 +118,7 @@ const FormInput = ({ chatId }: Props) => {
 							<div className="flex w-full items-center">
 								<div className="flex w-full flex-col gap-1.5 rounded-[26px] bg-[#f4f4f4] p-1.5 transition-colors dark:bg-token-main-surface-secondary">
 									<div className="flex items-center gap-1.5 md:gap-3.5">
-										<label htmlFor="file" className="cursor-pointer" aria-haspopup="dialog" aria-expanded="false" aria-controls="radix-:rhi:" data-state="closed">
-											<div className="flex">
-												<div
-													className="flex size-8 items-center justify-center rounded-full text-token-text-primary focus-visible:outline-black dark:text-white dark:focus-visible:outline-white"
-													aria-label="Attach files"
-												>
-													<AddFileIcon />
-												</div>
-												<input multiple id="file" type="file" tabIndex={-1} className="hidden" />
-											</div>
-										</label>
-										<div className="flex min-w-0 flex-1 flex-col">
+										<div className="ml-3.5 flex min-w-0 flex-1 flex-col">
 											<textarea
 												{...register("message")}
 												id="prompt-textarea"
