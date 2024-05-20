@@ -33,13 +33,13 @@ const ModalOpenAIKey = () => {
 	return (
 		<Modal isVisible={!key}>
 			<div className="flex max-w-[500px] flex-col px-5 py-3">
-				<h1 className="mb-2 text-3xl ">Enter API key</h1>
+				<h1 className="mb-2 text-3xl text-white">Enter API key</h1>
 				<p className="text-sm text-token-text-secondary">
-					{`To use our platform, you'll need to provide your API key. This allows us to securely authenticate your requests and provide you with the best possible experience.`}
+					To use our platform, you&apos;ll need to provide your API key. This allows us to securely authenticate your requests and provide you with the best possible experience.
 				</p>
 				<form onSubmit={handleSubmit(onSubmit)} className="flex flex-col">
 					<div className="my-5 grid grid-cols-4 items-center gap-4">
-						<label className="text-right" htmlFor="api-key">
+						<label className="text-right text-white" htmlFor="api-key">
 							API Key
 						</label>
 						<input
@@ -55,7 +55,7 @@ const ModalOpenAIKey = () => {
 					<Button
 						disabled={!watchApiKey}
 						type="submit"
-						className="ml-auto rounded-full border border-medium px-3 py-1.5 font-light transition-all hover:bg-token-main-surface-secondary disabled:hover:bg-token-main-surface-primary"
+						className="ml-auto rounded-full border border-medium px-3 py-1.5 font-light text-white transition-all hover:bg-token-main-surface-secondary disabled:hover:bg-token-main-surface-primary"
 					>
 						Save API key
 					</Button>
