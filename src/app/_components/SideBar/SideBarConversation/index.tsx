@@ -4,7 +4,11 @@ import { useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 import ChatRow from "./ChatRow";
 
-const SideBarConversation = () => {
+type Props = {
+	callback?: () => void;
+};
+
+const SideBarConversation = ({ callback }: Props) => {
 	const { data: session } = useSession();
 	const { data: conversations } = useQuery<SideBarConversation[]>({
 		queryKey: ["sideBarConversation", session?.user?.email],
@@ -20,7 +24,7 @@ const SideBarConversation = () => {
 				{
 					<ol>
 						{conversations.map((conversation) => (
-							<ChatRow key={conversation.id} id={conversation.id} displayMessage={conversation.messages[0].text} />
+							<ChatRow callback={callback} key={conversation.id} id={conversation.id} displayMessage={conversation.messages[0].text} />
 						))}
 					</ol>
 				}

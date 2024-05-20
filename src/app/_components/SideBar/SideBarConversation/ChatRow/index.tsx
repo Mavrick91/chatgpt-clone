@@ -8,14 +8,15 @@ import { doc, deleteDoc as firebaseDeleteDoc } from "firebase/firestore";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 type Props = {
 	id: string;
 	displayMessage: string;
+	callback?: () => void;
 };
 
-const ChatRow = ({ id, displayMessage }: Props) => {
+const ChatRow = ({ id, displayMessage, callback }: Props) => {
 	const queryClient = useQueryClient();
 	const pathname = usePathname();
 	const router = useRouter();
@@ -37,6 +38,16 @@ const ChatRow = ({ id, displayMessage }: Props) => {
 		},
 	});
 
+	const handleDelete = useCallback(() => {
+		deleteDoc();
+		if (callback) callback();
+	}, [deleteDoc, callback]);
+
+	const handleClickConversation = useCallback(() => {
+		if (callback) callback();
+		router.push(`/chat/${id}`);
+	}, [callback, router, id]);
+
 	useEffect(() => {
 		if (pathname.includes(id)) {
 			setActive(true);
@@ -52,7 +63,7 @@ const ChatRow = ({ id, displayMessage }: Props) => {
 					"bg-token-sidebar-surface-secondary opacity-90": active,
 				})}
 			>
-				<Link href={`/chat/${id}`} className="flex items-center gap-2 p-2">
+				<button onClick={handleClickConversation} className="flex w-full items-center gap-2 p-2 text-left">
 					<div className="relative grow overflow-hidden whitespace-nowrap">
 						{displayMessage}
 						<div
@@ -62,10 +73,10 @@ const ChatRow = ({ id, displayMessage }: Props) => {
 							})}
 						></div>
 					</div>
-				</Link>
+				</button>
 				<div className={classNames("absolute inset-y-0 right-0 items-center gap-1.5 pr-2 group-hover:flex", { flex: active, hidden: !active })}>
 					<button
-						onClick={() => deleteDoc()}
+						onClick={handleDelete}
 						className="flex items-center justify-center text-token-text-secondary transition hover:text-red-500"
 						aria-haspopup="menu"
 						aria-expanded="false"

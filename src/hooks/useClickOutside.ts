@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback, MutableRefObject } from "react";
+import { MutableRefObject, useCallback, useEffect, useRef, useState } from "react";
 
 interface UseClickOutside {
 	isDropdownOpen: boolean;
@@ -17,7 +17,7 @@ const useClickOutside = (): UseClickOutside => {
 	}, []);
 
 	const handleClickOutside = useCallback((event: MouseEvent) => {
-		if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node) && buttonRef.current && !buttonRef.current.contains(event.target as Node)) {
+		if ((dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) || (buttonRef.current && !buttonRef.current.contains(event.target as Node))) {
 			setIsDropdownOpen(false);
 		}
 	}, []);
