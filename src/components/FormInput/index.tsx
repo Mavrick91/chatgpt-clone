@@ -81,8 +81,8 @@ const FormInput = ({ chatId }: Props) => {
 					});
 
 					newChatId = await createNewChat();
-				}
-
+					}
+					
 				if (chatId || newChatId) {
 					await sendMessage(newChatId || chatId!, message);
 				}

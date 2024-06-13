@@ -20,7 +20,6 @@ export async function askQuestion(prompt: string, chatId: string, email: string,
 	});
 
 	if (!response) {
-		// return `ChatGPT was unable to find an answer for that! (Error: ${error.message})`;
 		return `ChatGPT was unable to find an answer for that!`;
 	}
 

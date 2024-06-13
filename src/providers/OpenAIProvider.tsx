@@ -14,7 +14,7 @@ interface OpenAIProviderProps {
 
 const OpenAIContext = createContext<OpenAIContextProps | undefined>(undefined);
 
-export const OpenAIProvider: React.FC<OpenAIProviderProps> = ({ children }) => {
+const OpenAIProvider: React.FC<OpenAIProviderProps> = ({ children }) => {
 	const [key, setKey] = useState<string | null>(() => localStorage.getItem("openAIKey"));
 
 	const updateKey = (newKey: string | undefined) => {
@@ -35,6 +35,8 @@ export const OpenAIProvider: React.FC<OpenAIProviderProps> = ({ children }) => {
 		</OpenAIContext.Provider>
 	);
 };
+
+export default OpenAIProvider;
 
 export const useOpenAI = () => {
 	const context = useContext(OpenAIContext);
